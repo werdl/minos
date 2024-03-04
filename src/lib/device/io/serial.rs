@@ -11,7 +11,7 @@ lazy_static! {
 }
 
 #[doc(hidden)]
-pub fn serial_print(args: ::core::fmt::Arguments) {
+pub fn _print_serial(args: ::core::fmt::Arguments) {
     use core::fmt::Write;
     SERIAL1.lock().write_fmt(args).expect("Printing to serial failed");
 }
@@ -20,7 +20,7 @@ pub fn serial_print(args: ::core::fmt::Arguments) {
 #[macro_export]
 macro_rules! serial_print {
     ($($arg:tt)*) => {
-        $crate::lib::device::io::serial::serial_print(format_args!($($arg)*));
+        $crate::lib::device::io::serial::_print_serial(format_args!($($arg)*));
     };
 }
 
