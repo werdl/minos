@@ -5,11 +5,12 @@ authors = ["werdl <werdl_is_cool@outlook.com>"]
 edition = "2018"
 
 [dependencies]
-bootloader = "0.9.28" # doesn't work with higher versions
-volatile = "0.3.0" # namespace reorganisation in higher versions
-spin = "0.9.8"
-x86_64 = "0.15.0"
-uart_16550 = "0.3.0"
+bootloader = "0.9"
+volatile = "0.2.6"
+spin = "0.5.2"
+x86_64 = "0.14.2"
+uart_16550 = "0.2.0"
+pic8259 = "0.10.1"
 
 [dependencies.lazy_static]
 version = "1.0"

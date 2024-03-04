@@ -6,10 +6,11 @@ use crate::{
 };
 
 #[test_case]
-fn trivial_assertion() {
-    test_name!("trivial_assertion");
+fn test_suite() {
+    test_name!("test_suite");
 
-    assert_eq!(1, 1);
+    assert!(true);
 }
 
 pub mod vga;
+pub mod idt;

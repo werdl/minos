@@ -13,7 +13,7 @@ use crate::{
 };
 
 /// our panic handler in non-test mode
-#[cfg(not(test))] // new attribute
+#[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
