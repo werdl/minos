@@ -11,13 +11,14 @@ spin = "0.5.2"
 x86_64 = "0.14.2"
 uart_16550 = "0.2.0"
 pic8259 = "0.10.1"
+pc-keyboard = "0.5.0"
 
 [dependencies.lazy_static]
 version = "1.0"
 features = ["spin_no_std"]
 
 [package.metadata.bootimage]
-run-command = ["qemu-system-x86_64", "-drive", "format=raw,file={}"] # if on a codespace or a terminal-only, add the "-curses" flag to the qemu command
+run-command = ["qemu-system-x86_64", "-curses", "-drive", "format=raw,file={}"] # if on a codespace or a terminal-only, add the "-curses" flag to the qemu command
 test-args = [
     "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio", "-display", "none"
 ]

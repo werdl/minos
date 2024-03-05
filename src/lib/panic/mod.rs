@@ -1,6 +1,4 @@
 use core::panic::PanicInfo;
-use crate::lib::device::io::vga::*;
-use crate::lib::device::io::serial::*;
 
 #[cfg(test)]
 use crate::test::infra::*;
@@ -17,7 +15,7 @@ use crate::{
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    crate::lib::hlt_loop();
 }
 
 // our panic handler in test mode
@@ -27,5 +25,5 @@ fn panic(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
-    loop {}
+    crate::lib::hlt_loop();
 }

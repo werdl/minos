@@ -14,14 +14,15 @@ use crate::print;
 #[repr(u8)]
 pub enum InterruptIndex {
     Timer = PIC_1_OFFSET,
+    Keyboard,
 }
 
 impl InterruptIndex {
-    fn as_u8(self) -> u8 {
+    pub fn as_u8(self) -> u8 {
         self as u8
     }
 
-    fn as_usize(self) -> usize {
+    pub fn as_usize(self) -> usize {
         usize::from(self.as_u8())
     }
 }
@@ -38,9 +39,14 @@ lazy_static! {
         idt[InterruptIndex::Timer.as_usize()]
         .set_handler_fn(timer_interrupt_handler);
 
+        idt[InterruptIndex::Keyboard.as_usize()]
+        .set_handler_fn(crate::lib::device::io::ps2::interrupt_handler);
+
         idt
     };
 }
+
+
 
 extern "x86-interrupt" fn timer_interrupt_handler(
     _stack_frame: InterruptStackFrame)
