@@ -2,6 +2,7 @@ pub mod device;
 pub mod panic;
 pub mod interrupts;
 pub mod gdt;
+pub mod memory;
 
 pub fn init() {
     interrupts::idt::init_idt();
