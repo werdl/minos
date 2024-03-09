@@ -18,7 +18,7 @@ version = "1.0"
 features = ["spin_no_std"]
 
 [package.metadata.bootimage]
-run-command = ["qemu-system-x86_64", "-curses", "-drive", "format=raw,file={}"] # if on a codespace or a terminal-only, add the "-curses" flag to the qemu command
+run-command = ["qemu-system-x86_64", "-drive", "format=raw,file={}", "-drive", "id=disk,file=disk.img,if=none", "-device", "ich9-ahci,id=ahci", "-device", "ide-hd,drive=disk,bus=ahci.0"] # if on a codespace or a terminal-only, add the "-curses" flag to the qemu command
 test-args = [
     "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio", "-display", "none"
 ]

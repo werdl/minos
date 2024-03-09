@@ -30,5 +30,7 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
+    lib::device::disk::ata::ata_test();
+
     lib::hlt_loop();
 }
