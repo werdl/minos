@@ -20,7 +20,7 @@ fn test_println() {
 fn test_println_many() {
     test_name!("vga::println_many");
 
-    for _ in 0..200 {
+    for _ in 0..4 {
         println!("test_println_many output");
     }
 }

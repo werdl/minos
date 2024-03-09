@@ -14,3 +14,4 @@ fn test_suite() {
 
 pub mod vga;
 pub mod idt;
+pub mod alloc;
