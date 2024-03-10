@@ -4,11 +4,8 @@ use core::ptr::null_mut;
 
 use linked_list_allocator::LockedHeap;
 
-use linked_list::LinkedListAllocator;
-
 #[global_allocator]
-static ALLOCATOR: Locked<LinkedListAllocator> =
-    Locked::new(LinkedListAllocator::new());
+static ALLOCATOR: LockedHeap = LockedHeap::empty();
 
 pub const HEAP_START: usize = 0x_4444_4444_0000;
 pub const HEAP_SIZE: usize = 100 * 1024;

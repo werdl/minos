@@ -45,11 +45,7 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     #[cfg(test)]
     test_main();
 
-<<<<<<< HEAD
-    lib::device::disk::ata::ata_test();
-=======
-    println!("It did not crash!");
->>>>>>> fad8a70e07bce29369e86ebbdc00f14f72e075e8
+    lib::fs::mount::include_bytes_test();
 
     lib::hlt_loop();
 }

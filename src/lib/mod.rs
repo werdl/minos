@@ -10,6 +10,7 @@ pub mod panic;
 pub mod interrupts;
 pub mod gdt;
 pub mod memory;
+pub mod fs;
 
 
 pub fn init(boot_info: &'static bootloader::BootInfo) {
