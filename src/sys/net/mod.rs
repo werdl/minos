@@ -239,7 +239,7 @@ impl Stats {
 }
 
 fn find_pci_io_base(vendor_id: u16, device_id: u16) -> Option<u16> {
-    if let Some(mut pci_device) = sys::pci::find_device(vendor_id, device_id) {
+    if let Some(mut pci_device) = sys::device::io::pci::find_device(vendor_id, device_id) {
         pci_device.enable_bus_mastering();
         let io_base = (pci_device.base_addresses[0] as u16) & 0xFFF0;
         Some(io_base)

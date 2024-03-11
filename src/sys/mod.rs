@@ -47,7 +47,6 @@ pub mod gdt;
 pub mod idt;
 pub mod mem;
 pub mod net;
-pub mod pci;
 pub mod pic;
 pub mod process;
 pub mod random;

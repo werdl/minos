@@ -183,6 +183,6 @@ pub fn print_fmt(args: fmt::Arguments) {
     if cfg!(feature = "video") {
         sys::device::io::vga::print_fmt(args);
     } else {
-        sys::device::serial::print_fmt(args);
+        sys::device::io::serial::print_fmt(args);
     }
 }

@@ -26,7 +26,7 @@ pub fn init(boot_info: &'static BootInfo) {
     sys::gdt::init();
     sys::idt::init();
     sys::pic::init(); // Enable interrupts
-    sys::device::serial::init();
+    sys::device::io::serial::init();
     sys::device::io::ps2::init();
     sys::time::init();
 
@@ -36,7 +36,7 @@ pub fn init(boot_info: &'static BootInfo) {
     sys::mem::init(boot_info);
     sys::acpi::init(); // Require MEM
     sys::device::cpu::init();
-    sys::pci::init(); // Require MEM
+    sys::device::io::pci::init(); // Require MEM
     sys::net::init(); // Require PCI
     sys::device::disk::ata::init();
     sys::fs::init(); // Require ATA

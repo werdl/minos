@@ -43,7 +43,7 @@ fn list(verbose: bool) -> Result<(), ExitCode> {
         );
         println!("{}|    |  |   |    |{}", color1, reset);
     }
-    for d in sys::pci::list() {
+    for d in sys::device::io::pci::list() {
         print!(
             "{:04X}:{:02X}:{:02X} [{:04X}:{:04X}]",
             d.bus, d.device, d.function, d.vendor_id, d.device_id
