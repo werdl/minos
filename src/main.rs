@@ -1,51 +1,46 @@
 #![no_std]
 #![no_main]
-#![feature(custom_test_frameworks)]
-#![feature(abi_x86_interrupt)]
-#![feature(const_mut_refs)]
-#![test_runner(crate::test::infra::test_runner)]
-#![reexport_test_harness_main = "test_main"]
-
-mod test;
-
-use core::panic;
-
-use alloc::{
-    vec, vec::Vec
-};
-
-use alloc::boxed::Box;
-use alloc::rc::Rc;
-use bootloader::entry_point;
-use bootloader::BootInfo;
-use test::{infra::*, tests::*};
-
-mod lib;
-
-use lib::device::io::serial::*;
-use lib::device::io::vga::*;
-use lib::interrupts::*;
-use lib::panic::*;
-use lib::memory::*;
 
 extern crate alloc;
 
-use x86_64::structures::paging::Page;
-use x86_64::structures::paging::Translate;
-use x86_64::VirtAddr;
+use bootloader::{entry_point, BootInfo};
+use core::panic::PanicInfo;
+use minos::{debug, hlt_loop, print, println, sys, usr};
 
-entry_point!(kernel_main);
+entry_point!(main);
 
-/// start the kernel
-#[no_mangle]
-fn kernel_main(boot_info: &'static BootInfo) -> ! {
-    lib::init(boot_info);
-    println!("Hello World{}", "!"); 
-    
-    #[cfg(test)]
-    test_main();
+fn main(boot_info: &'static BootInfo) -> ! {
+    minos::init(boot_info);
+    print!("\x1b[?25h"); // Enable cursor
+    loop {
+        if let Some(cmd) = option_env!("minos_CMD") {
+            let prompt = usr::shell::prompt_string(true);
+            println!("{}{}", prompt, cmd);
+            usr::shell::exec(cmd).ok();
+            sys::acpi::shutdown();
+        } else {
+            user_boot();
+        }
+    }
+}
 
-    lib::fs::mount::include_bytes_test();
+fn user_boot() {
+    let script = "/ini/boot.sh";
+    if sys::fs::File::open(script).is_some() {
+        usr::shell::main(&["shell", script]).ok();
+    } else {
+        if sys::fs::is_mounted() {
+            println!("Could not find '{}'", script);
+        } else {
+            println!("MFS is not mounted to '/'");
+        }
+        println!("Running console in diskless mode");
+        usr::shell::main(&["shell"]).ok();
+    }
+}
 
-    lib::hlt_loop();
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    debug!("{}", info);
+    hlt_loop();
 }
