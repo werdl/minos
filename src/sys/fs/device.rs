@@ -3,10 +3,10 @@ use super::dir::Dir;
 use super::file::File;
 use super::{dirname, filename, realpath, FileIO, IO};
 
-use crate::sys::ata::Drive;
-use crate::sys::clock::{Realtime, Uptime};
-use crate::sys::cmos::RTC;
-use crate::sys::console::Console;
+use crate::sys::device::disk::ata::Drive;
+use crate::sys::time::clock::{Realtime, Uptime};
+use crate::sys::time::cmos::RTC;
+use crate::sys::device::io::console::Console;
 use crate::sys::net::socket::tcp::TcpSocket;
 use crate::sys::net::socket::udp::UdpSocket;
 use crate::sys::random::Random;

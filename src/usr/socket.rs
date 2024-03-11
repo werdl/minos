@@ -3,7 +3,7 @@ use crate::api::fs::IO;
 use crate::api::io;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
-use crate::sys::console;
+use crate::sys::device::io::console;
 use crate::sys::fs::OpenFlag;
 use crate::sys::net::SocketStatus;
 use crate::{debug, usr};

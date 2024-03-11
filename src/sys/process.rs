@@ -1,5 +1,5 @@
 use crate::api::process::ExitCode;
-use crate::sys::console::Console;
+use crate::sys::device::io::console::Console;
 use crate::sys::fs::{Device, Resource};
 use crate::sys;
 use crate::sys::gdt::GDT;

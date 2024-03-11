@@ -26,7 +26,7 @@ pub enum SocketStatus {
 }
 
 fn time() -> Instant {
-    Instant::from_micros((sys::clock::realtime() * 1000000.0) as i64)
+    Instant::from_micros((sys::time::clock::realtime() * 1000000.0) as i64)
 }
 
 #[derive(Clone)]

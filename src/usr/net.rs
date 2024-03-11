@@ -4,7 +4,7 @@ use crate::api::fs;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
 use crate::sys;
-use crate::sys::console;
+use crate::sys::device::io::console;
 use crate::sys::net;
 use crate::sys::net::EthernetDeviceIO;
 use alloc::format;

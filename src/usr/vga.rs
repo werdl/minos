@@ -20,7 +20,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
             if args.len() == 4 && args[2] == "font" {
                 if let Ok(buf) = fs::read_to_bytes(args[3]) {
                     if let Ok(font) = api::font::from_bytes(&buf) {
-                        sys::vga::set_font(&font);
+                        sys::device::io::vga::set_font(&font);
                         Ok(())
                     } else {
                         error!("Could not parse font file");
@@ -34,7 +34,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
                 warning!("Use ANSI OSC palette sequence");
                 if let Ok(csv) = fs::read_to_string(args[3]) {
                     if let Ok(palette) = palette::from_csv(&csv) {
-                        sys::vga::set_palette(palette);
+                        sys::device::io::vga::set_palette(palette);
                         Ok(())
                     } else {
                         error!("Could not parse palette file");

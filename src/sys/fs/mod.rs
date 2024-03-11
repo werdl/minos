@@ -11,7 +11,7 @@ mod super_block;
 use crate::sys;
 
 pub use crate::api::fs::{dirname, filename, realpath, FileIO, IO};
-pub use crate::sys::ata::BLOCK_SIZE;
+pub use crate::sys::device::disk::ata::BLOCK_SIZE;
 pub use bitmap_block::BITMAP_SIZE;
 pub use block_device::{
     dismount, format_ata, format_mem, is_mounted, mount_ata, mount_mem

@@ -14,7 +14,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
                 Err(ExitCode::Failure)
             } else {
                 let layout = args[2];
-                if sys::keyboard::set_keyboard(layout) {
+                if sys::device::io::ps2::set_keyboard(layout) {
                     Ok(())
                 } else {
                     error!("Unknown keyboard layout");

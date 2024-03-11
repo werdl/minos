@@ -1,7 +1,7 @@
 use crate::api::console::Style;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
-use crate::sys::console;
+use crate::sys::device::io::console;
 use crate::sys::fs::OpenFlag;
 use crate::usr;
 

@@ -382,7 +382,7 @@ fn cmd_unset(args: &[&str], config: &mut Config) -> Result<(), ExitCode> {
 }
 
 fn cmd_logs() -> Result<(), ExitCode> {
-    print!("{}", sys::log::read());
+    print!("{}", sys::device::io::log::read());
     Ok(())
 }
 
@@ -636,7 +636,7 @@ fn repl(config: &mut Config) -> Result<(), ExitCode> {
         config.env.insert("status".to_string(), format!("{}", code as u8));
         prompt.history.add(&cmd);
         prompt.history.save(history_file);
-        sys::console::drain();
+        sys::device::io::console::drain();
         println!();
     }
     print!("\x1b[2J\x1b[1;1H"); // Clear screen and move to top

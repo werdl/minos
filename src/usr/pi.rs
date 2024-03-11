@@ -21,7 +21,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
     let mut l = BigInt::from(3);
     let mut first = true;
     loop {
-        if sys::console::end_of_text() {
+        if sys::device::io::console::end_of_text() {
             break;
         }
         if &q * 4 + &r - &t < &n * &t {

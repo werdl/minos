@@ -3,7 +3,7 @@ use crate::api::console::Style;
 use crate::api::fs;
 use crate::api::process::ExitCode;
 use crate::api::random;
-use crate::sys::console;
+use crate::sys::device::io::console;
 
 use alloc::collections::BTreeSet;
 use alloc::format;

@@ -6,7 +6,7 @@ use crate::api::process::ExitCode;
 use crate::api::syscall;
 use crate::api::time;
 use crate::sys;
-use crate::sys::console;
+use crate::sys::device::io::console;
 
 use alloc::collections::btree_map::BTreeMap;
 use alloc::collections::vec_deque::VecDeque;

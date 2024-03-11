@@ -22,12 +22,12 @@ use bootloader::BootInfo;
 const KERNEL_SIZE: usize = 2 << 20; // 2 MB
 
 pub fn init(boot_info: &'static BootInfo) {
-    sys::vga::init();
+    sys::device::io::vga::init();
     sys::gdt::init();
     sys::idt::init();
     sys::pic::init(); // Enable interrupts
-    sys::serial::init();
-    sys::keyboard::init();
+    sys::device::serial::init();
+    sys::device::io::ps2::init();
     sys::time::init();
 
     let v = option_env!("minos_VERSION").unwrap_or(env!("CARGO_PKG_VERSION"));
@@ -35,12 +35,12 @@ pub fn init(boot_info: &'static BootInfo) {
 
     sys::mem::init(boot_info);
     sys::acpi::init(); // Require MEM
-    sys::cpu::init();
+    sys::device::cpu::init();
     sys::pci::init(); // Require MEM
     sys::net::init(); // Require PCI
-    sys::ata::init();
+    sys::device::disk::ata::init();
     sys::fs::init(); // Require ATA
-    sys::clock::init(); // Require MEM
+    sys::time::clock::init(); // Require MEM
 }
 
 #[alloc_error_handler]

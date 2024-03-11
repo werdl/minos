@@ -313,7 +313,7 @@ impl Chess {
                 csi_depth, depth, csi_count, n, csi_reset, s, nps
             );
 
-            if args.len() > 1 || sys::console::end_of_text() {
+            if args.len() > 1 || sys::device::io::console::end_of_text() {
                 break;
             } else {
                 depth += 1;

@@ -3,7 +3,7 @@ use crate::sys;
 use alloc::string::ToString;
 use core::fmt;
 
-pub use crate::sys::console::{EOT_KEY, ETX_KEY};
+pub use crate::sys::device::io::console::{EOT_KEY, ETX_KEY};
 
 #[derive(Clone, Copy)]
 pub struct Style {
@@ -102,7 +102,7 @@ pub fn is_printable(c: char) -> bool {
     if cfg!(feature = "video") {
         // Check if the char can be converted to ASCII or Extended ASCII before
         // asking the VGA driver if it's printable.
-        ((c as u32) < 0xFF) && sys::vga::is_printable(c as u8)
+        ((c as u32) < 0xFF) && sys::device::io::vga::is_printable(c as u8)
     } else {
         true // TODO
     }

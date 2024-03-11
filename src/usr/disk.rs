@@ -3,8 +3,8 @@ use crate::api::io;
 use crate::api::process::ExitCode;
 use crate::api::unit::SizeUnit;
 use crate::sys;
-use crate::sys::ata::Drive;
-use crate::sys::console;
+use crate::sys::device::disk::ata::Drive;
+use crate::sys::device::io::console;
 
 use alloc::format;
 use alloc::string::String;
@@ -79,7 +79,7 @@ fn erase(pathname: &str) -> Result<(), ExitCode> {
                         print!("\x1b[2K\x1b[1G");
                         print!("Erasing block {}/{}", i, n);
                         // TODO: Implement drive.write(block, buf)
-                        sys::ata::write(bus, dsk, i, &buf).ok();
+                        sys::device::disk::ata::write(bus, dsk, i, &buf).ok();
                     }
                     println!();
                     print!("\x1b[?25h"); // Enable cursor
@@ -96,7 +96,7 @@ fn erase(pathname: &str) -> Result<(), ExitCode> {
 
 fn list() -> Result<(), ExitCode> {
     println!("Path            Name (Size)");
-    for drive in sys::ata::list() {
+    for drive in sys::device::disk::ata::list() {
         println!("/dev/ata/{}/{}    {}", drive.bus, drive.dsk, drive);
     }
     Ok(())
