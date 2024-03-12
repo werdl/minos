@@ -44,7 +44,7 @@ fn dump(args: &[&str]) -> Result<(), ExitCode> {
     let addr = parse_usize(args[0]).unwrap();
     let size = parse_usize(args[1]).unwrap();
     let phys_addr = PhysAddr::new(addr as u64);
-    let virt_addr = sys::mem::phys_to_virt(phys_addr);
+    let virt_addr = sys::memory::mem::phys_to_virt(phys_addr);
     let buf = unsafe {
         core::slice::from_raw_parts(virt_addr.as_ptr(), size)
     };
@@ -72,8 +72,8 @@ fn usage(args: &[&str]) -> Result<(), ExitCode> {
             }
         }
     }
-    let size = sys::allocator::memory_size();
-    let used = sys::allocator::memory_used();
+    let size = sys::memory::allocator::memory_size();
+    let used = sys::memory::allocator::memory_used();
     let free = size - used;
     let width = [size, used, free].iter().fold(0, |acc, num|
         core::cmp::max(acc, unit.format(*num).len())

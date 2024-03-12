@@ -42,12 +42,12 @@ pub fn init(boot_info: &'static BootInfo) {
             ))
         };
 
-        sys::allocator::init_heap().expect("heap initialization failed");
+        sys::memory::allocator::init_heap().expect("heap initialization failed");
     });
 }
 
 pub fn mapper() -> &'static mut OffsetPageTable<'static> {
-    unsafe { sys::mem::MAPPER.as_mut().unwrap() }
+    unsafe { sys::memory::mem::MAPPER.as_mut().unwrap() }
 }
 
 pub fn memory_size() -> u64 {

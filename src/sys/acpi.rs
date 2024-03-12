@@ -25,7 +25,7 @@ pub fn init() {
             }
             if let Ok(dsdt) = &acpi.dsdt() {
                 let phys_addr = PhysAddr::new(dsdt.address as u64);
-                let virt_addr = sys::mem::phys_to_virt(phys_addr);
+                let virt_addr = sys::memory::mem::phys_to_virt(phys_addr);
                 let ptr = virt_addr.as_ptr();
                 let table = unsafe {
                     core::slice::from_raw_parts(ptr , dsdt.length as usize)
@@ -79,7 +79,7 @@ impl AcpiHandler for minosAcpiHandler {
         size: usize,
     ) -> PhysicalMapping<Self, T> {
         let phys_addr = PhysAddr::new(addr as u64);
-        let virt_addr = sys::mem::phys_to_virt(phys_addr);
+        let virt_addr = sys::memory::mem::phys_to_virt(phys_addr);
         let ptr = NonNull::new(virt_addr.as_mut_ptr()).unwrap();
         PhysicalMapping::new(addr, ptr, size, size, Self)
     }
@@ -154,6 +154,6 @@ impl Handler for minosAmlHandler {
 }
 
 fn read_addr<T>(addr: usize) -> T where T: Copy {
-    let virtual_address = sys::mem::phys_to_virt(PhysAddr::new(addr as u64));
+    let virtual_address = sys::memory::mem::phys_to_virt(PhysAddr::new(addr as u64));
     unsafe { *virtual_address.as_ptr::<T>() }
 }

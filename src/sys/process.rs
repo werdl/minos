@@ -2,7 +2,7 @@ use crate::api::process::ExitCode;
 use crate::sys::device::io::console::Console;
 use crate::sys::fs::{Device, Resource};
 use crate::sys;
-use crate::sys::gdt::GDT;
+use crate::sys::interrupts::gdt::GDT;
 
 use alloc::boxed::Box;
 use alloc::collections::btree_map::BTreeMap;
@@ -227,15 +227,15 @@ pub fn exit() {
     let proc = &table[id()];
 
     let page_table = unsafe {
-        sys::mem::create_page_table(proc.page_table_frame)
+        sys::memory::mem::create_page_table(proc.page_table_frame)
     };
     let phys_mem_offset = unsafe {
-        sys::mem::PHYS_MEM_OFFSET.unwrap()
+        sys::memory::mem::PHYS_MEM_OFFSET.unwrap()
     };
     let mut mapper = unsafe {
         OffsetPageTable::new(page_table, VirtAddr::new(phys_mem_offset))
     };
-    sys::allocator::free_pages(&mut mapper, proc.code_addr, MAX_PROC_SIZE);
+    sys::memory::allocator::free_pages(&mut mapper, proc.code_addr, MAX_PROC_SIZE);
 
     MAX_PID.fetch_sub(1, Ordering::SeqCst);
     set_id(proc.parent_id);
@@ -253,7 +253,7 @@ unsafe fn page_table_frame() -> PhysFrame {
 }
 
 pub unsafe fn page_table() -> &'static mut PageTable {
-    sys::mem::create_page_table(page_table_frame())
+    sys::memory::mem::create_page_table(page_table_frame())
 }
 
 pub unsafe fn alloc(layout: Layout) -> *mut u8 {
@@ -330,15 +330,15 @@ impl Process {
             return Err(());
         }
 
-        let page_table_frame = sys::mem::frame_allocator().allocate_frame().
+        let page_table_frame = sys::memory::mem::frame_allocator().allocate_frame().
             expect("frame allocation failed");
 
         let page_table = unsafe {
-            sys::mem::create_page_table(page_table_frame)
+            sys::memory::mem::create_page_table(page_table_frame)
         };
 
         let kernel_page_table = unsafe {
-            sys::mem::active_page_table()
+            sys::memory::mem::active_page_table()
         };
 
         // FIXME: for now we just copy everything
@@ -347,7 +347,7 @@ impl Process {
             *user_page = kernel_page.clone();
         }
 
-        let phys_mem_offset = unsafe { sys::mem::PHYS_MEM_OFFSET.unwrap() };
+        let phys_mem_offset = unsafe { sys::memory::mem::PHYS_MEM_OFFSET.unwrap() };
         let mut mapper = unsafe {
             OffsetPageTable::new(page_table, VirtAddr::new(phys_mem_offset))
         };
@@ -360,7 +360,7 @@ impl Process {
         let code_ptr = code_addr as *mut u8;
         let code_size = bin.len();
 
-        sys::allocator::alloc_pages(&mut mapper, code_addr, code_size).
+        sys::memory::allocator::alloc_pages(&mut mapper, code_addr, code_size).
             expect("proc mem alloc");
 
         if bin[0..4] == ELF_MAGIC { // ELF binary
@@ -368,7 +368,7 @@ impl Process {
                 entry_point_addr = obj.entry();
 
                 let addr = code_addr + entry_point_addr;
-                sys::allocator::alloc_pages(&mut mapper, addr, code_size).
+                sys::memory::allocator::alloc_pages(&mut mapper, addr, code_size).
                     expect("proc mem alloc");
 
                 for segment in obj.segments() {
@@ -425,14 +425,14 @@ impl Process {
     // Switch to user mode and execute the program
     fn exec(&self, args_ptr: usize, args_len: usize) {
         let page_table = unsafe { sys::process::page_table() };
-        let phys_mem_offset = unsafe { sys::mem::PHYS_MEM_OFFSET.unwrap() };
+        let phys_mem_offset = unsafe { sys::memory::mem::PHYS_MEM_OFFSET.unwrap() };
         let mut mapper = unsafe {
             OffsetPageTable::new(page_table, VirtAddr::new(phys_mem_offset))
         };
 
         let heap_addr = self.code_addr + (self.stack_addr - self.code_addr) / 2;
 
-        sys::allocator::alloc_pages(&mut mapper, heap_addr, 1).
+        sys::memory::allocator::alloc_pages(&mut mapper, heap_addr, 1).
             expect("proc heap alloc");
 
         let args_ptr = ptr_from_addr(args_ptr as u64) as usize;

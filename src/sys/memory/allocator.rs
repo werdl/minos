@@ -25,12 +25,12 @@ fn max_memory() -> u64 {
 }
 
 pub fn init_heap() -> Result<(), MapToError<Size4KiB>> {
-    let mapper = sys::mem::mapper();
-    let mut frame_allocator = sys::mem::frame_allocator();
+    let mapper = sys::memory::mem::mapper();
+    let mut frame_allocator = sys::memory::mem::frame_allocator();
 
     // Use half of the memory for the heap caped to 16 MB by default
     // because the allocator is slow.
-    let heap_size = cmp::min(sys::mem::memory_size(), max_memory()) / 2;
+    let heap_size = cmp::min(sys::memory::mem::memory_size(), max_memory()) / 2;
     let heap_start = VirtAddr::new(HEAP_START);
     sys::process::init_process_addr(HEAP_START + heap_size);
 
@@ -62,7 +62,7 @@ pub fn alloc_pages(
     mapper: &mut OffsetPageTable, addr: u64, size: usize
 ) -> Result<(), ()> {
     let size = size.saturating_sub(1) as u64;
-    let mut frame_allocator = sys::mem::frame_allocator();
+    let mut frame_allocator = sys::memory::mem::frame_allocator();
 
     let pages = {
         let start_page = Page::containing_address(VirtAddr::new(addr));
@@ -146,7 +146,7 @@ impl PhysBuf {
 
 pub fn phys_addr(ptr: *const u8) -> u64 {
     let virt_addr = VirtAddr::new(ptr as u64);
-    let phys_addr = sys::mem::virt_to_phys(virt_addr).unwrap();
+    let phys_addr = sys::memory::mem::virt_to_phys(virt_addr).unwrap();
     phys_addr.as_u64()
 }
 

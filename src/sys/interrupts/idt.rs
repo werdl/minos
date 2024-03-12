@@ -42,13 +42,13 @@ lazy_static! {
         unsafe {
             idt.double_fault.
                 set_handler_fn(double_fault_handler).
-                set_stack_index(sys::gdt::DOUBLE_FAULT_IST);
+                set_stack_index(sys::interrupts::gdt::DOUBLE_FAULT_IST);
             idt.page_fault.
                 set_handler_fn(page_fault_handler).
-                set_stack_index(sys::gdt::PAGE_FAULT_IST);
+                set_stack_index(sys::interrupts::gdt::PAGE_FAULT_IST);
             idt.general_protection_fault.
                 set_handler_fn(general_protection_fault_handler).
-                set_stack_index(sys::gdt::GENERAL_PROTECTION_FAULT_IST);
+                set_stack_index(sys::interrupts::gdt::GENERAL_PROTECTION_FAULT_IST);
 
             let f = wrapped_syscall_handler as *mut fn();
             idt[0x80].
@@ -130,12 +130,12 @@ extern "x86-interrupt" fn page_fault_handler(
     let addr = Cr2::read().unwrap().as_u64();
 
     let page_table = unsafe { sys::process::page_table() };
-    let phys_mem_offset = unsafe { sys::mem::PHYS_MEM_OFFSET.unwrap() };
+    let phys_mem_offset = unsafe { sys::memory::mem::PHYS_MEM_OFFSET.unwrap() };
     let mut mapper = unsafe {
         OffsetPageTable::new(page_table, VirtAddr::new(phys_mem_offset))
     };
 
-    if sys::allocator::alloc_pages(&mut mapper, addr, 1).is_err() {
+    if sys::memory::allocator::alloc_pages(&mut mapper, addr, 1).is_err() {
         let csi_color = api::console::Style::color("LightRed");
         let csi_reset = api::console::Style::reset();
         printk!(

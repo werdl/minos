@@ -23,8 +23,8 @@ const KERNEL_SIZE: usize = 2 << 20; // 2 MB
 
 pub fn init(boot_info: &'static BootInfo) {
     sys::device::io::vga::init();
-    sys::gdt::init();
-    sys::idt::init();
+    sys::interrupts::gdt::init();
+    sys::interrupts::idt::init();
     sys::pic::init(); // Enable interrupts
     sys::device::io::serial::init();
     sys::device::io::ps2::init();
@@ -33,7 +33,7 @@ pub fn init(boot_info: &'static BootInfo) {
     let v = option_env!("minos_VERSION").unwrap_or(env!("CARGO_PKG_VERSION"));
     log!("minos v{}", v);
 
-    sys::mem::init(boot_info);
+    sys::memory::mem::init(boot_info);
     sys::acpi::init(); // Require MEM
     sys::device::cpu::init();
     sys::device::io::pci::init(); // Require MEM

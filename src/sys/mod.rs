@@ -38,14 +38,11 @@ macro_rules! log {
 }
 
 pub mod acpi;
-pub mod allocator;
 pub mod device;
 
-
 pub mod fs;
-pub mod gdt;
-pub mod idt;
-pub mod mem;
+pub mod interrupts;
+pub mod memory;
 pub mod net;
 pub mod pic;
 pub mod process;

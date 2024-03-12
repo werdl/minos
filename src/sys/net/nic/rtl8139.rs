@@ -1,4 +1,4 @@
-use crate::sys::allocator::PhysBuf;
+use crate::sys::memory::allocator::PhysBuf;
 use crate::sys::net::{Config, EthernetDeviceIO, Stats};
 
 use alloc::sync::Arc;

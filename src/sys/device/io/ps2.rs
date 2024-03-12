@@ -65,7 +65,7 @@ pub fn set_keyboard(layout: &str) -> bool {
 
 pub fn init() {
     set_keyboard(option_env!("minos_KEYBOARD").unwrap_or("qwerty"));
-    sys::idt::set_irq_handler(1, interrupt_handler);
+    sys::interrupts::idt::set_irq_handler(1, interrupt_handler);
 }
 
 fn read_scancode() -> u8 {

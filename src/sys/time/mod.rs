@@ -89,10 +89,10 @@ pub fn init() {
     let divider = if PIT_DIVIDER < 65536 { PIT_DIVIDER } else { 0 };
     let channel = 0;
     set_pit_frequency_divider(divider as u16, channel);
-    sys::idt::set_irq_handler(0, pit_interrupt_handler);
+    sys::interrupts::idt::set_irq_handler(0, pit_interrupt_handler);
 
     // RTC timmer
-    sys::idt::set_irq_handler(8, rtc_interrupt_handler);
+    sys::interrupts::idt::set_irq_handler(8, rtc_interrupt_handler);
     CMOS::new().enable_update_interrupt();
 
     // TSC timmer
