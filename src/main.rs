@@ -9,25 +9,31 @@ use minos::{debug, hlt_loop, print, println, sys, usr};
 
 entry_point!(main);
 
-fn main(boot_info: &'static BootInfo) -> ! {
+fn main(boot_info: &'static BootInfo) -> !
+ {
     minos::init(boot_info);
     print!("\x1b[?25h"); // Enable cursor
-    loop {
-        if let Some(cmd) = option_env!("minos_CMD") {
-            let prompt = usr::shell::prompt_string(true);
-            println!("{}{}", prompt, cmd);
-            usr::shell::exec(cmd).ok();
-            sys::acpi::shutdown();
-        } else {
-            user_boot();
-        }
-    }
+
+
+    usr::shell::main();
+    loop {}
+
+    // loop {
+    //     if let Some(cmd) = option_env!("minos_CMD") {
+    //         let prompt = usr::shell::prompt_string(true);
+    //         println!("{}{}", prompt, cmd);
+    //         usr::shell::exec(cmd).ok();
+    //         sys::acpi::shutdown();
+    //     } else {
+    //         user_boot();
+    //     }
+    // }
 }
 
 fn user_boot() {
     let script = "/ini/boot.sh";
     if sys::fs::File::open(script).is_some() {
-        usr::shell::main(&["shell", script]).ok();
+        println!("shell: Running '{}'", script);
     } else {
         if sys::fs::is_mounted() {
             println!("Could not find '{}'", script);
@@ -35,7 +41,6 @@ fn user_boot() {
             println!("MFS is not mounted to '/'");
         }
         println!("Running console in diskless mode");
-        usr::shell::main(&["shell"]).ok();
     }
 }
 

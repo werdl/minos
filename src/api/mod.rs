@@ -82,7 +82,9 @@ macro_rules! warning {
 }
 
 pub mod allocator;
+pub mod base64;
 pub mod io;
+pub mod hex;
 pub mod process;
 pub mod prompt;
 pub mod random;
@@ -90,4 +92,5 @@ pub mod regex;
 pub mod syscall;
 pub mod time;
 pub mod unit;
+pub mod user;
 // TODO: add mod wildcard

@@ -1,7 +1,7 @@
 mod nic;
 pub mod socket;
 
-use crate::{sys, usr};
+use crate::{sys, api};
 
 use alloc::sync::Arc;
 use alloc::vec::Vec;
@@ -100,7 +100,7 @@ impl<'a> smoltcp::phy::Device for EthernetDevice {
         if let Some(buffer) = self.receive_packet() {
             if self.config().is_debug_enabled() {
                 debug!("NET Packet Received");
-                usr::hex::print_hex(&buffer);
+                api::hex::print_hex(&buffer);
             }
             self.stats().rx_add(buffer.len() as u64);
             let rx = RxToken { buffer };
@@ -151,7 +151,7 @@ impl smoltcp::phy::TxToken for TxToken {
         let buf = self.device.next_tx_buffer(len);
         if config.is_debug_enabled() {
             debug!("NET Packet Transmitted");
-            usr::hex::print_hex(buf);
+            api::hex::print_hex(buf);
         }
         let res = f(buf);
         self.device.transmit_packet(len);

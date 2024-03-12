@@ -60,7 +60,7 @@ image: $(img)
 	dd conv=notrunc if=$(bin) of=$(img)
 
 qemu-opts = -m $(memory) -drive file=$(img),format=raw \
-			 -audiodev $(audio),id=a0 -machine pcspk-audiodev=a0 \
+			 -audiodev $(audio),id=a0  \
 			 -netdev user,id=e0,hostfwd=tcp::8080-:80 -device $(nic),netdev=e0
 ifeq ($(kvm),true)
 	qemu-opts += -cpu host -accel kvm
@@ -77,7 +77,7 @@ ifeq ($(monitor),true)
 endif
 
 ifeq ($(output),serial)
-	qemu-opts += -display none -chardev stdio,id=s0,signal=off -serial chardev:s0
+	qemu-opts += -curses
 endif
 
 ifeq ($(mode),debug)
