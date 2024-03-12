@@ -6,6 +6,7 @@ use alloc::string::String;
 use alloc::vec::Vec;
 
 use crate::api;
+use crate::sys::process;
 
 pub fn main() {
     // main shell instance
@@ -16,7 +17,6 @@ pub fn main() {
 
     let mut last_exit_code = api::process::ExitCode::Success;
 
-    let mut cwd = String::from("/");
 
 
     loop {
@@ -28,11 +28,11 @@ pub fn main() {
         }
 
         last_exit_code = match args[0] {
-            "ls" => list::main(cwd.clone(), &args[1..]),
-            "install" => install::main(cwd.clone(), &args[1..]),
-            "cd" => cd::main(&mut cwd, &args[1..]),
+            "ls" => list::main(&args[1..]),
+            "install" => install::main(&args[1..]),
+            "cd" => cd::main(&args[1..]),
             "cwd" => {
-                println!("{}", cwd);
+                println!("{}", process::dir());
                 api::process::ExitCode::Success
             },
             "$?" => {

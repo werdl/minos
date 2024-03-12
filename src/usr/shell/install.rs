@@ -297,7 +297,7 @@ fn list() {
     }
 }
 
-pub fn main(_cwd: String, args: &[&str]) -> ExitCode {
+pub fn main(args: &[&str]) -> ExitCode {
     let csi_color = Style::color("Yellow");
     let csi_reset = Style::reset();
     println!(
