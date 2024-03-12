@@ -1,7 +1,7 @@
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
-use crate::api::vga::palette;
+use crate::api::io::vga::palette;
 use crate::{api, sys};
 
 // TODO: Remove this command when everything can be done from userspace
@@ -19,7 +19,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
         "set" => {
             if args.len() == 4 && args[2] == "font" {
                 if let Ok(buf) = fs::read_to_bytes(args[3]) {
-                    if let Ok(font) = api::font::from_bytes(&buf) {
+                    if let Ok(font) = api::io::font::from_bytes(&buf) {
                         sys::device::io::vga::set_font(&font);
                         Ok(())
                     } else {

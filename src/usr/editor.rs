@@ -1,6 +1,6 @@
-use crate::api::console::Style;
+use crate::api::io::console::Style;
 use crate::api::process::ExitCode;
-use crate::api::{console, fs, io};
+use crate::api::{console, io, io::fs};
 use crate::api;
 
 use alloc::format;
@@ -581,11 +581,11 @@ impl Editor {
     }
 
     fn rows(&self) -> usize {
-        api::console::rows() - 1 // Leave out one line for status line
+        api::io::console::rows() - 1 // Leave out one line for status line
     }
 
     fn cols(&self) -> usize {
-        api::console::cols()
+        api::io::console::cols()
     }
 }
 

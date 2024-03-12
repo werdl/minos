@@ -1,6 +1,6 @@
-use crate::api::console::Style;
-use crate::api::fs;
-use crate::api::fs::DeviceType;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
+use crate::api::io::fs::DeviceType;
 use crate::api::io;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
@@ -315,7 +315,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
 
 fn create_dir(pathname: &str, verbose: bool) {
     if syscall::info(pathname).is_none() {
-        if let Some(handle) = api::fs::create_dir(pathname) {
+        if let Some(handle) = api::io::fs::create_dir(pathname) {
             syscall::close(handle);
             if verbose {
                 println!("Created '{}'", pathname);

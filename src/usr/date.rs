@@ -1,6 +1,6 @@
 use crate::api;
-use crate::api::clock::DATE_TIME_ZONE;
-use crate::api::console::Style;
+use crate::api::time::clock::DATE_TIME_ZONE;
+use crate::api::io::console::Style;
 use crate::api::process::ExitCode;
 use time::validate_format_string;
 

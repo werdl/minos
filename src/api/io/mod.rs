@@ -1,5 +1,10 @@
 use crate::api::syscall;
 
+pub mod vga;
+pub mod fs;
+pub mod console;
+pub mod font;
+
 use alloc::string::{String, ToString};
 use alloc::vec;
 

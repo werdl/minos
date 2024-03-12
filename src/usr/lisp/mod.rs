@@ -13,8 +13,8 @@ use eval::{eval, eval_variable_args};
 use expand::expand;
 use parse::parse;
 
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
 use crate::api::prompt::Prompt;
 

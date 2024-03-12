@@ -665,7 +665,7 @@ pub fn lisp_host(args: &[Exp]) -> Result<Exp, Err> {
 pub fn lisp_date(args: &[Exp]) -> Result<Exp, Err> {
     ensure_length_eq!(args, 1);
     let ts = usize::try_from(number(&args[0])?)? as i64;
-    let fmt = api::clock::DATE_TIME;
+    let fmt = api::time::clock::DATE_TIME;
     let date = api::time::from_timestamp_utc(ts).format(fmt);
     Ok(Exp::Str(date))
 }

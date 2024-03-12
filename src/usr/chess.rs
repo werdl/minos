@@ -1,5 +1,5 @@
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
 use crate::api::prompt::Prompt;
 use crate::{api, sys};
@@ -52,7 +52,7 @@ fn update_autocomplete(prompt: &mut Prompt, game: &mut Game) {
 }
 
 fn system_time() -> u128 {
-    (api::clock::realtime() * 1000.0) as u128
+    (api::time::clock::realtime() * 1000.0) as u128
 }
 
 struct Chess {

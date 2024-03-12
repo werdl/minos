@@ -1,4 +1,4 @@
-use crate::api::fs::IO;
+use crate::api::io::fs::IO;
 use crate::api::process::ExitCode;
 use crate::sys::fs::FileInfo;
 use crate::sys::syscall::number::*;

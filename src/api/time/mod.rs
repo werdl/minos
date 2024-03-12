@@ -1,4 +1,4 @@
-use crate::api::clock;
+pub mod clock;
 use crate::sys;
 
 use time::{Duration, OffsetDateTime, UtcOffset};

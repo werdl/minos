@@ -1,5 +1,5 @@
-use crate::api::clock;
-use crate::api::console::Style;
+use crate::api::time::clock;
+use crate::api::io::console::Style;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
 use crate::debug;

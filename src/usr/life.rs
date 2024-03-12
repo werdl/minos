@@ -1,6 +1,6 @@
 use crate::{api, sys};
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
 use crate::api::random;
 use crate::sys::device::io::console;
@@ -170,7 +170,7 @@ impl fmt::Display for Game {
 }
 
 pub fn main(args: &[&str]) -> Result<(), ExitCode> {
-    let mut game = Game::new(api::console::cols(), api::console::rows() - 1);
+    let mut game = Game::new(api::io::console::cols(), api::io::console::rows() - 1);
     let mut i = 0;
     let n = args.len();
     while i < n {

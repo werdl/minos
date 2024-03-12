@@ -1,5 +1,5 @@
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
 use crate::api::prompt::Prompt;
 use crate::api::regex::Regex;
@@ -297,7 +297,7 @@ fn cmd_change_dir(args: &[&str], config: &mut Config) -> Result<(), ExitCode> {
             if path.len() > 1 {
                 path = path.trim_end_matches('/').into();
             }
-            if api::fs::is_dir(&path) {
+            if api::io::fs::is_dir(&path) {
                 sys::process::set_dir(&path);
                 config.env.insert("DIR".to_string(), sys::process::dir());
                 Ok(())
@@ -486,7 +486,7 @@ fn exec_with_config(cmd: &str, config: &mut Config) -> Result<(), ExitCode> {
                 }
                 let path = args[i + 1];
                 let append_mode = head_count > 1;
-                if api::fs::reopen(path, left_handle, append_mode).is_err() {
+                if api::io::fs::reopen(path, left_handle, append_mode).is_err() {
                     error!("Could not open path for redirection");
                     return Err(ExitCode::Failure);
                 }
@@ -507,7 +507,7 @@ fn exec_with_config(cmd: &str, config: &mut Config) -> Result<(), ExitCode> {
     // TODO: Remove this when redirections are done in spawned process
     if restore_handles {
         for i in 0..3 {
-            api::fs::reopen("/dev/console", i, false).ok();
+            api::io::fs::reopen("/dev/console", i, false).ok();
         }
     }
 
@@ -673,7 +673,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
         }
 
         let path = args[1];
-        if let Ok(contents) = api::fs::read_to_string(path) {
+        if let Ok(contents) = api::io::fs::read_to_string(path) {
             for line in contents.split('\n') {
                 if !line.is_empty() {
                     exec_with_config(line, &mut config).ok();
@@ -709,26 +709,26 @@ fn test_shell() {
     // Redirect standard output
     exec("print test1 => /tmp/test1").ok();
     assert_eq!(
-        api::fs::read_to_string("/tmp/test1"),
+        api::io::fs::read_to_string("/tmp/test1"),
         Ok("test1\n".to_string())
     );
 
     // Redirect standard output explicitely
     exec("print test2 1=> /tmp/test2").ok();
     assert_eq!(
-        api::fs::read_to_string("/tmp/test2"),
+        api::io::fs::read_to_string("/tmp/test2"),
         Ok("test2\n".to_string())
     );
 
     // Redirect standard error explicitely
     exec("hex /nope 2=> /tmp/test3").ok();
-    assert!(api::fs::read_to_string("/tmp/test3").unwrap().
+    assert!(api::io::fs::read_to_string("/tmp/test3").unwrap().
         contains("Could not read file '/nope'"));
 
     let mut config = Config::new();
     exec_with_config("set b 42", &mut config).ok();
     exec_with_config("print a $b $c d => /test", &mut config).ok();
-    assert_eq!(api::fs::read_to_string("/test"), Ok("a 42 d\n".to_string()));
+    assert_eq!(api::io::fs::read_to_string("/test"), Ok("a 42 d\n".to_string()));
 
     sys::fs::dismount();
 }

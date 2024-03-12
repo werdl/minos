@@ -1,5 +1,5 @@
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::io;
 use crate::api::process::ExitCode;
 use crate::api::random;
@@ -124,7 +124,7 @@ pub fn create(username: &str) -> Result<(), ExitCode> {
     }
 
     // Create home dir
-    if let Some(handle) = api::fs::create_dir(&format!("/usr/{}", username)) {
+    if let Some(handle) = api::io::fs::create_dir(&format!("/usr/{}", username)) {
         api::syscall::close(handle);
     } else {
         error!("Could not create home dir");
@@ -190,7 +190,7 @@ pub fn hash(password: &str) -> String {
 
 fn read_hashed_passwords() -> BTreeMap<String, String> {
     let mut hashed_passwords = BTreeMap::new();
-    if let Ok(csv) = api::fs::read_to_string(USERS) {
+    if let Ok(csv) = api::io::fs::read_to_string(USERS) {
         for line in csv.split('\n') {
             let mut rows = line.split(',');
             if let Some(username) = rows.next() {

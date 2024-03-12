@@ -1,4 +1,4 @@
-use crate::api::fs;
+use crate::api::io::fs;
 use crate::api::syscall;
 
 pub fn get_u64() -> u64 {

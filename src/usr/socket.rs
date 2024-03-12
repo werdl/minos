@@ -1,5 +1,5 @@
-use crate::api::console::Style;
-use crate::api::fs::IO;
+use crate::api::io::console::Style;
+use crate::api::io::fs::IO;
 use crate::api::io;
 use crate::api::process::ExitCode;
 use crate::api::syscall;

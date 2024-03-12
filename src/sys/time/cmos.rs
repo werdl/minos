@@ -1,6 +1,6 @@
 use crate::sys;
-use crate::api::clock::{DATE_TIME, DATE_TIME_LEN};
-use crate::api::fs::{FileIO, IO};
+use crate::api::time::clock::{DATE_TIME, DATE_TIME_LEN};
+use crate::api::io::fs::{FileIO, IO};
 
 use alloc::string::String;
 use bit_field::BitField;

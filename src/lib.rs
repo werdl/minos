@@ -25,12 +25,12 @@ pub fn init(boot_info: &'static BootInfo) {
     sys::device::io::vga::init();
     sys::interrupts::gdt::init();
     sys::interrupts::idt::init();
-    sys::pic::init(); // Enable interrupts
+    sys::interrupts::pic::init(); // Enable interrupts
     sys::device::io::serial::init();
     sys::device::io::ps2::init();
     sys::time::init();
 
-    let v = option_env!("minos_VERSION").unwrap_or(env!("CARGO_PKG_VERSION"));
+    let v = option_env!("MINOS_VERSION").unwrap_or(env!("CARGO_PKG_VERSION"));
     log!("minos v{}", v);
 
     sys::memory::mem::init(boot_info);
@@ -45,8 +45,8 @@ pub fn init(boot_info: &'static BootInfo) {
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {
-    let csi_color = api::console::Style::color("LightRed");
-    let csi_reset = api::console::Style::reset();
+    let csi_color = api::io::console::Style::color("LightRed");
+    let csi_reset = api::io::console::Style::reset();
     printk!(
         "{}Error:{} Could not allocate {} bytes\n",
         csi_color,
@@ -64,8 +64,8 @@ impl<T> Testable for T where T: Fn() {
     fn run(&self) {
         print!("test {} ... ", core::any::type_name::<T>());
         self();
-        let csi_color = api::console::Style::color("LightGreen");
-        let csi_reset = api::console::Style::reset();
+        let csi_color = api::io::console::Style::color("LightGreen");
+        let csi_reset = api::io::console::Style::reset();
         println!("{}ok{}", csi_color, csi_reset);
     }
 }
@@ -120,8 +120,8 @@ fn test_kernel_main(boot_info: &'static BootInfo) -> ! {
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    let csi_color = api::console::Style::color("LightRed");
-    let csi_reset = api::console::Style::reset();
+    let csi_color = api::io::console::Style::color("LightRed");
+    let csi_reset = api::io::console::Style::reset();
     println!("{}failed{}\n", csi_color, csi_reset);
     println!("{}\n", info);
     exit_qemu(QemuExitCode::Failed);

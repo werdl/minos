@@ -1,6 +1,6 @@
-use crate::api::font::Font;
-use crate::api::vga::color;
-use crate::api::vga::{Color, Palette};
+use crate::api::io::font::Font;
+use crate::api::io::vga::color;
+use crate::api::io::vga::{Color, Palette};
 use crate::sys;
 
 use alloc::string::String;

@@ -1,4 +1,4 @@
-use crate::api::{console, fs, io};
+use crate::api::{io, io::fs, io::console};
 use alloc::boxed::Box;
 use alloc::string::{String, ToString};
 use alloc::vec::Vec;

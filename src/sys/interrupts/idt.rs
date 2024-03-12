@@ -24,7 +24,7 @@ pub fn init() {
 
 // Translate IRQ into system interrupt
 fn interrupt_index(irq: u8) -> u8 {
-    sys::pic::PIC_1_OFFSET + irq
+    sys::interrupts::pic::PIC_1_OFFSET + irq
 }
 
 fn default_handler() {}
@@ -81,7 +81,7 @@ macro_rules! irq_handler {
             let handlers = IRQ_HANDLERS.lock();
             handlers[$irq]();
             unsafe {
-                sys::pic::PICS.lock().notify_end_of_interrupt(
+                sys::interrupts::pic::PICS.lock().notify_end_of_interrupt(
                     interrupt_index($irq)
                 );
             }
@@ -136,8 +136,8 @@ extern "x86-interrupt" fn page_fault_handler(
     };
 
     if sys::memory::allocator::alloc_pages(&mut mapper, addr, 1).is_err() {
-        let csi_color = api::console::Style::color("LightRed");
-        let csi_reset = api::console::Style::reset();
+        let csi_color = api::io::console::Style::color("LightRed");
+        let csi_reset = api::io::console::Style::reset();
         printk!(
             "{}Error:{} Could not allocate address {:#X}\n",
             csi_color, csi_reset, addr
@@ -258,7 +258,7 @@ extern "sysv64" fn syscall_handler(
 
     regs.rax = res;
 
-    unsafe { sys::pic::PICS.lock().notify_end_of_interrupt(0x80) };
+    unsafe { sys::interrupts::pic::PICS.lock().notify_end_of_interrupt(0x80) };
 }
 
 pub fn set_irq_handler(irq: u8, handler: fn()) {

@@ -62,8 +62,8 @@ macro_rules! eprintln {
 #[macro_export]
 macro_rules! error {
     ($($arg:tt)*) => ({
-        let csi_color = $crate::api::console::Style::color("LightRed");
-        let csi_reset = $crate::api::console::Style::reset();
+        let csi_color = $crate::api::io::console::Style::color("LightRed");
+        let csi_reset = $crate::api::io::console::Style::reset();
         eprintln!(
             "{}Error:{} {}", csi_color, csi_reset, format_args!($($arg)*)
         );
@@ -73,8 +73,8 @@ macro_rules! error {
 #[macro_export]
 macro_rules! warning {
     ($($arg:tt)*) => ({
-        let csi_color = $crate::api::console::Style::color("Yellow");
-        let csi_reset = $crate::api::console::Style::reset();
+        let csi_color = $crate::api::io::console::Style::color("Yellow");
+        let csi_reset = $crate::api::io::console::Style::reset();
         eprintln!(
             "{}Warning:{} {}", csi_color, csi_reset, format_args!($($arg)*)
         );
@@ -82,10 +82,6 @@ macro_rules! warning {
 }
 
 pub mod allocator;
-pub mod clock;
-pub mod console;
-pub mod font;
-pub mod fs;
 pub mod io;
 pub mod process;
 pub mod prompt;
@@ -94,5 +90,4 @@ pub mod regex;
 pub mod syscall;
 pub mod time;
 pub mod unit;
-pub mod vga;
 // TODO: add mod wildcard

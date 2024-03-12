@@ -1,5 +1,5 @@
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
 use crate::sys::device::io::console;
@@ -75,7 +75,7 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
         }
     } else if let Some(info) = syscall::info(path) {
         if info.is_file() {
-            if let Ok(contents) = api::fs::read_to_string(path) {
+            if let Ok(contents) = api::io::fs::read_to_string(path) {
                 print!("{}", contents);
                 Ok(())
             } else {
@@ -102,11 +102,11 @@ pub fn main(args: &[&str]) -> Result<(), ExitCode> {
                 if let Ok(bytes) = fs::read_to_bytes(path) {
                     if is_char_device && bytes.len() == 1 {
                         match bytes[0] as char {
-                            api::console::ETX_KEY => {
+                            api::io::console::ETX_KEY => {
                                 println!("^C");
                                 return Ok(());
                             }
-                            api::console::EOT_KEY => {
+                            api::io::console::EOT_KEY => {
                                 println!("^D");
                                 return Ok(());
                             }

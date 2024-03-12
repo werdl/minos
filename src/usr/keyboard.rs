@@ -1,4 +1,4 @@
-use crate::api::console::Style;
+use crate::api::io::console::Style;
 use crate::api::process::ExitCode;
 use crate::sys;
 

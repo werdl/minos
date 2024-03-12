@@ -1,6 +1,6 @@
 use crate::sys;
 
-use crate::api::fs::{FileIO, IO};
+use crate::api::io::fs::{FileIO, IO};
 use crate::sys::net::SocketStatus;
 
 use super::SOCKETS;

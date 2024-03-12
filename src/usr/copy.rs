@@ -1,5 +1,5 @@
-use crate::api::console::Style;
-use crate::api::fs;
+use crate::api::io::console::Style;
+use crate::api::io::fs;
 use crate::api::process::ExitCode;
 
 pub fn main(args: &[&str]) -> Result<(), ExitCode> {

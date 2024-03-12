@@ -1,5 +1,5 @@
 use crate::api;
-use crate::api::console::Style;
+use crate::api::io::console::Style;
 use crate::api::process::ExitCode;
 use crate::api::syscall;
 
@@ -45,7 +45,7 @@ pub fn print_hash(path: &str, full: bool) -> Result<(), ExitCode> {
     let n = if full { 32 } else { 16 };
     if let Some(info) = syscall::info(path) {
         if info.is_file() {
-            if let Ok(bytes) = api::fs::read_to_bytes(path) {
+            if let Ok(bytes) = api::io::fs::read_to_bytes(path) {
                 let mut hasher = Sha256::new();
                 hasher.update(bytes);
                 let res = hasher.finalize();
