@@ -360,7 +360,7 @@ pub fn main(args: &[&str]) -> ExitCode {
         println!();
         println!("{}Installation successful!{}", csi_color, csi_reset);
         println!();
-        println!("Quit the console or reboot to apply changes");
+        super::main();
     }
 
     ExitCode::Success

@@ -30,7 +30,7 @@ pub fn main(args: &[&str]) -> ExitCode {
                     }
                 }
                 Some(res) => {
-                    error!("Not a file but a {:?}", res);
+                    error!("Is a {}", res);
                     return ExitCode::ReadError;
                 }
                 None => {
