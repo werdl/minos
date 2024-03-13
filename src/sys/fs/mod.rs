@@ -109,6 +109,16 @@ pub enum Resource {
     Device(Device),
 }
 
+impl core::fmt::Display for Resource {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        match self {
+            Resource::Dir(_) => write!(f, "directory"),
+            Resource::File(_) => write!(f, "file"),
+            Resource::Device(_) => write!(f, "device"),
+        }
+    }
+}
+
 impl FileIO for Resource {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize, ()> {
         match self {

@@ -347,7 +347,7 @@ pub fn main(args: &[&str]) -> ExitCode {
             println!();
             println!("{}Creating user...{}", csi_color, csi_reset);
             
-            println!("Enter username: ");
+            print!("Enter username: ");
             let username = io::stdin().read_line();
 
             let res = api::user::create(&username);

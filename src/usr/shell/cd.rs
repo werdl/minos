@@ -35,12 +35,12 @@ pub fn main(args: &[&str]) -> ExitCode {
             if crate::api::io::fs::exists(new_path.as_str()) {
                 process::set_dir(new_path.as_str());
             } else {
-                println!("Directory does not exist");
+                error!("Directory does not exist");
                 return ExitCode::ExecError;
             }
         }
         _ => {
-            println!("Too many arguments");
+            error!("Too many arguments");
             return ExitCode::UsageError;
         }
     }

@@ -2,8 +2,8 @@ pub mod cat;
 pub mod cd;
 pub mod list;
 pub mod install;
+pub mod time;
 
-use alloc::string::String;
 use alloc::vec::Vec;
 use alloc::format;
 
@@ -34,6 +34,9 @@ pub fn main() {
             "install" => install::main(&args[1..]),
             "cd" => cd::main(&args[1..]),
             "cat" => cat::main(&args[1..]),
+            "time" => time::main(&args[1..]),
+
+
             "cwd" => {
                 println!("{}", process::dir());
                 api::process::ExitCode::Success

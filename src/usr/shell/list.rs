@@ -12,8 +12,6 @@ pub fn list_files(path: &str) -> Result<(), ()> {
         path = String::from("/");
     }
 
-    println!("Listing {}", path.as_str());
-
     let resource = fs::open(path.as_str(), OpenFlag::Dir as usize).ok_or(())?;
 
 
@@ -28,11 +26,12 @@ pub fn list_files(path: &str) -> Result<(), ()> {
                 if is_dir {
                     println!("\x1b[34m{}\x1b[0m", name);
                 } else {
-                    println!("{}", name);
+                    // green for files
+                    println!("\x1b[32m{}\x1b[0m", name);
                 }
             }
         }
-        _ => println!("Not a directory"),
+        _ => error!("Not a directory"),
     };
 
     Ok(())
