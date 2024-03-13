@@ -6,3 +6,7 @@
 make image output=video keyboard=qwerty
 make qemu output=video nic=rtl8139
 ```
+or on a codespace
+```bash
+make image output=serial keyboard=qwerty && make qemu output=serial nic=rtl8139
+```

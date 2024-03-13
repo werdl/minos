@@ -77,7 +77,7 @@ ifeq ($(monitor),true)
 endif
 
 ifeq ($(output),serial)
-	qemu-opts += -curses
+	qemu-opts += -display none -serial stdio
 endif
 
 ifeq ($(mode),debug)

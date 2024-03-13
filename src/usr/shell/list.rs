@@ -12,13 +12,24 @@ pub fn list_files(path: &str) -> Result<(), ()> {
         path = String::from("/");
     }
 
+    println!("Listing {}", path.as_str());
+
     let resource = fs::open(path.as_str(), OpenFlag::Dir as usize).ok_or(())?;
 
 
     match resource {
         Resource::Dir(dir) => {
             for entry in dir.entries() {
-                println!("{}", entry.name());
+                // first, determine if entry is a directory, or a file
+                let name = entry.name();
+                let is_dir = entry.is_dir();
+
+                // if dir, print in blue
+                if is_dir {
+                    println!("\x1b[34m{}\x1b[0m", name);
+                } else {
+                    println!("{}", name);
+                }
             }
         }
         _ => println!("Not a directory"),

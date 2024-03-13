@@ -12,6 +12,8 @@ entry_point!(main);
 fn main(boot_info: &'static BootInfo) -> !
  {
     minos::init(boot_info);
+
+    
     print!("\x1b[?25h"); // Enable cursor
 
 

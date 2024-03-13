@@ -262,6 +262,9 @@ pub fn copy_files(verbose: bool) {
         include_bytes!("../../../dsk/var/www/index.html"),
         verbose,
     );
+
+    // finally, create a marker file so we know the installation is complete
+    api::io::fs::write("/var/installed", b"installation complete").ok();
 }
 
 fn parse_disk_path(pathname: &str) -> Result<(u8, u8), String> {
@@ -301,7 +304,7 @@ pub fn main(args: &[&str]) -> ExitCode {
     let csi_color = Style::color("Yellow");
     let csi_reset = Style::reset();
     println!(
-        "{}Welcome to MOROS v{} installation program!{}",
+        "{}Welcome to minos v{} installation program!{}",
         csi_color,
         env!("CARGO_PKG_VERSION"),
         csi_reset

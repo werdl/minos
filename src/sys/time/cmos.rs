@@ -65,7 +65,13 @@ impl FileIO for RTC {
             self.hour, self.minute, self.second
         ).map_err(|_| ())?;
         let out = date_time.format(DATE_TIME);
-        buf.copy_from_slice(out.as_bytes());
+        
+
+        // copy, but don't copy more than the buffer can hold
+        let len = core::cmp::min(out.len(), buf.len());
+
+        buf[..len].copy_from_slice(&out.as_bytes()[..len]);
+
         Ok(out.len())
     }
 
