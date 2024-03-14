@@ -16,7 +16,10 @@ pub fn main(args: &[&str]) -> ExitCode {
         
     match args.len() {
         1 => {
-            let path = args[0];
+            let path = fs::canonicalize(args[0]).expect("Failed to canoicalize path");
+
+            let path = path.as_str();
+
             let resource = fs::open(path, OpenFlag::Read as usize);
             match resource {
                 Some(Resource::File(mut file)) => {

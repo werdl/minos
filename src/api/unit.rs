@@ -18,7 +18,7 @@ impl SizeUnit {
     }
 }
 
-const PREFIXES: [&str; 5] = ["", "K", "M", "G", "T"];
+const PREFIXES: [&str; 5] = ["B", "K", "M", "G", "T"];
 
 fn binary_size(size: usize) -> String {
     let n = PREFIXES.len();

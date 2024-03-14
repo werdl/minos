@@ -3,6 +3,7 @@ pub mod cd;
 pub mod list;
 pub mod install;
 pub mod time;
+pub mod tcp;
 pub mod unix_core;
 
 use alloc::vec::Vec;
@@ -22,6 +23,9 @@ fn inner(args: Vec<&str>) -> api::process::ExitCode {
         "mv" => unix_core::mv(&args[1..]),
         "rm" => unix_core::rm(&args[1..]),
         "mkdir" => unix_core::mkdir(&args[1..]),
+        "rmdir" => unix_core::rmdir(&args[1..]),
+        "touch" => unix_core::touch(&args[1..]),
+        "tcp" => tcp::main(&args[1..]),
         "canon" => {
             if args.len() != 2 {
                 println!("Usage: canon <path>");
@@ -32,6 +36,21 @@ fn inner(args: Vec<&str>) -> api::process::ExitCode {
             println!("{}", path);
             api::process::ExitCode::Success
         },
+        "up" => {
+            // go up one directory
+            let mut path = process::dir();
+            if path == "/" {
+                return api::process::ExitCode::Success;
+            }
+
+            let mut parts: Vec<&str> = path.split('/').collect();
+            parts.pop();
+
+            let new_path = parts.join("/");
+            process::set_dir(format!("{}{}", if new_path.is_empty() { "/" } else {""},new_path).as_str());
+
+            api::process::ExitCode::Success
+        }
 
 
         "cwd" => {

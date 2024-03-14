@@ -23,13 +23,13 @@ pub fn cp(args: &[&str]) -> ExitCode {
     }
 
     // step 1 - open source file
-    let source = fs::open(fs::canonicalize(args[0]).expect("Failed to canoicalize path").as_str(), OpenFlag::Read as usize);
+    let source = fs::open(fs::canonicalize(args[0]).expect("Failed to canonicalize path").as_str(), OpenFlag::Read as usize);
 
     match source {
         Some(Resource::File(mut src)) => {
             // step 2 - open destination file
             let destination = fs::open(
-                fs::canonicalize(args[1]).expect("Failed to canoicalize path").as_str(),
+                fs::canonicalize(args[1]).expect("Failed to canonicalize path").as_str(),
                 OpenFlag::Write as usize + OpenFlag::Create as usize,
             );
 
@@ -178,4 +178,57 @@ pub fn mkdir(args: &[&str]) -> ExitCode {
     }
 
     ExitCode::Success
+}
+
+pub fn rmdir(args: &[&str]) -> ExitCode {
+    rm(args)
+}
+
+pub fn touch(args: &[&str]) -> ExitCode {
+    if args.len() != 1 {
+        error!("Usage: touch <path>");
+        return ExitCode::UsageError;
+    }
+
+    // exists? error
+    if fs::open(
+        fs::canonicalize(args[0]).expect("Failed to canonicalize path").as_str(),
+        OpenFlag::Read as usize,
+    ).is_some() {
+        error!("File already exists: {}", args[0]);
+        return ExitCode::DataError;
+    }
+
+    let result = fs::open(
+        fs::canonicalize(args[0]).expect("Failed to canonicalize path").as_str(),
+        OpenFlag::Create as usize,
+    );
+
+    match result {
+        Some(Resource::File(mut file)) => {
+            // touch the file
+            file.write(&[0]).expect("Failed to write to file");
+            ExitCode::Success
+        }
+        Some(res) => {
+            error!("Is a {}", res);
+            ExitCode::DataError
+        }
+        None => {
+            // possibly a device, try to open it
+            let device = fs::Device::open(args[0]);
+            match device {
+                Some(mut device) => {
+                    // touch the device
+                    device.write(&[0]).expect("Failed to write to device");
+                    ExitCode::Success
+                }
+                None => {
+                    error!("No such file or directory: {}", args[0]);
+                    ExitCode::DataError
+                }
+            }
+        }
+    }
+    
 }

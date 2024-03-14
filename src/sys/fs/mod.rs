@@ -25,6 +25,7 @@ use dir_entry::DirEntry;
 use super_block::SuperBlock;
 
 use alloc::string::{String, ToString};
+use alloc::format;
 
 pub const VERSION: u8 = 1;
 
@@ -155,17 +156,20 @@ impl FileIO for Resource {
 
 pub fn canonicalize(path: &str) -> Result<String, ()> {
     // PROBLEM: does not currently support multiple ".." in the path, e.g. "../../foo"
-    let path = realpath(path.replace("..", dirname(&sys::process::dir())).as_str());
 
-    match sys::process::env("HOME") {
-        Some(home) => {
-            if path.starts_with('~') {
-                Ok(path.replace('~', &home))
-            } else {
-                Ok(path)
-            }
+    let path = realpath(path);
+
+    if path.starts_with('/') {
+        Ok(format!("/{}", path.strip_prefix('/').expect("Failed to strip prefix")))
+    } else {
+        let mut cwd = format!("{}/", sys::process::dir());
+        cwd.push_str(&path);
+        
+        while cwd.chars().nth(0) == Some('/') {
+            cwd.remove(0);
         }
-        None => Ok(path),
+
+        Ok(format!("/{}", cwd))
     }
 }
 

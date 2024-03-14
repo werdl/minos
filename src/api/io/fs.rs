@@ -41,7 +41,6 @@ pub fn filename(pathname: &str) -> &str {
     &pathname[i..n]
 }
 
-// Transform "foo.txt" into "/path/to/foo.txt"
 pub fn realpath(pathname: &str) -> String {
     if pathname.starts_with('/') {
         pathname.into()
