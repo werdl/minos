@@ -13,6 +13,8 @@ fn main(boot_info: &'static BootInfo) -> !
  {
     minos::init(boot_info);
 
+    sys::device::io::vga::set_palette(minos::api::io::vga::palette::from_csv(include_str!("../dsk/ini/palettes/gruvbox-dark.csv")).unwrap());
+
     
     print!("\x1b[?25h"); // Enable cursor
 

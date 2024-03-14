@@ -154,15 +154,18 @@ impl FileIO for Resource {
 }
 
 pub fn canonicalize(path: &str) -> Result<String, ()> {
+    // PROBLEM: does not currently support multiple ".." in the path, e.g. "../../foo"
+    let path = realpath(path.replace("..", dirname(&sys::process::dir())).as_str());
+
     match sys::process::env("HOME") {
         Some(home) => {
             if path.starts_with('~') {
                 Ok(path.replace('~', &home))
             } else {
-                Ok(path.to_string())
+                Ok(path)
             }
         }
-        None => Ok(path.to_string()),
+        None => Ok(path),
     }
 }
 

@@ -16,19 +16,20 @@ use crate::sys::fs::Resource;
 use alloc::vec;
 
 pub fn cp(args: &[&str]) -> ExitCode {
+    // PROBLEM: copies but then hangs
     if args.len() != 2 {
         error!("Usage: cp <source> <destination>");
         return ExitCode::UsageError;
     }
 
     // step 1 - open source file
-    let source = fs::open(args[0], OpenFlag::Read as usize);
+    let source = fs::open(fs::canonicalize(args[0]).expect("Failed to canoicalize path").as_str(), OpenFlag::Read as usize);
 
     match source {
         Some(Resource::File(mut src)) => {
             // step 2 - open destination file
             let destination = fs::open(
-                args[1],
+                fs::canonicalize(args[1]).expect("Failed to canoicalize path").as_str(),
                 OpenFlag::Write as usize + OpenFlag::Create as usize,
             );
 
@@ -162,4 +163,19 @@ pub fn mv(args: &[&str]) -> ExitCode {
     // step 2 - remove source (and return the result)
     rm(&[args[0]])
     
+}
+
+pub fn mkdir(args: &[&str]) -> ExitCode {
+    if args.len() != 1 {
+        error!("Usage: mkdir <path>");
+        return ExitCode::UsageError;
+    }
+
+    let result = crate::api::io::fs::create_dir(args[0]);
+    if result.is_none() {
+        error!("Failed to create directory: {}", args[0]);
+        return ExitCode::DataError;
+    }
+
+    ExitCode::Success
 }

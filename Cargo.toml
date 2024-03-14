@@ -1,11 +1,11 @@
 [package]
 name = "minos"
 description = "minos: Obscure Rust Operating System"
-version = "0.10.2"
-authors = ["Vincent Ollivier <v@vinc.cc>"]
+version = "0.1.0"
+authors = ["werdl <werdl_is_cool@outlook.com", "Vincent Ollivier <v@vinc.cc>"]
 edition = "2018"
 license = "MIT"
-repository = "https://github.com/vinc/minos"
+repository = "https://github.com/werdl/minos"
 readme = "README.md"
 default-run = "minos"
 

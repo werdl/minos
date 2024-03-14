@@ -1,5 +1,6 @@
 use crate::api::io::font::Font;
 use crate::api::io::vga::color;
+use crate::api::io::vga::palette::from_csv;
 use crate::api::io::vga::{Color, Palette};
 use crate::sys;
 
@@ -557,7 +558,6 @@ pub fn init() {
     set_attr_ctrl_reg(0xE, 0x3E);
     set_attr_ctrl_reg(0xF, 0x3F);
 
-    set_palette(Palette::default());
 
     // Disable blinking
     let reg = 0x10; // Attribute Mode Control Register
